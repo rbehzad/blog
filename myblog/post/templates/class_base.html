@@ -1,0 +1,112 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+  <title>{% block title %}{% endblock title %}</title>
+</head>
+
+<body>
+  <div id="container_wrapper1">
+    <div id="container_wrapper2">
+      <div id="container">
+        <div id="header">
+          <div id="logo">
+            <div id="site_slogan"></div>
+          </div>
+        </div>
+        <div id="menu">
+          <ul>
+            <li><a href="#" class="current">Home</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Photo Gallery</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+
+        <!-- posts -->
+        <div id="content">
+          <div id="left_column">
+            {% block content %}
+            {% endblock content %}
+          </div>
+
+          <!-- right side -->
+          <div id="right_column">
+
+            <!-- search -->
+            <div class="section">
+              <form method="get" action="#">
+                <input name="search" type="text" value="Search Anything" id="keyword" />
+                <input type="submit" value="Go" class="button" />
+              </form>
+            </div>
+
+            <!-- Categories -->
+            <div class="section">
+              <div class="section1_top"></div>
+              <div class="section1_middle">
+                <h2>Categories</h2>
+                <ul>
+                  {% for cate in categories %}
+                  <li><a href='/blog/category/{{cate.slug}}'>{{cate.title}}</a></li>
+                  {% endfor %}
+                </ul>
+              </div>
+              <div class="section1_bottom"></div>
+            </div>
+
+
+            <!-- Archives -->
+            <div class="section">
+              <div class="section2_top"></div>
+              <div class="section2_middle">
+                <h2>Archives</h2>
+                <ul>
+                  <li><a href="#">&raquo; Suspendisse potenti</a></li>
+                  <li><a href="#">&raquo; Aliquam tristique lacus</a></li>
+                  <li><a href="#">&raquo; Duis pulvinar scelerisque ante</a></li>
+                </ul>
+              </div>
+              <div class="section2_bottom"></div>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="section">
+              <div class="section3_top"></div>
+              <div class="section3_middle">
+                <h2>Quick Links</h2>
+                <ul>
+                  <li><a href="#">&raquo; External Web Link One</a></li>
+                  <li><a href="#">&raquo; Website Link Two</a></li>
+                  <li><a href="#">&raquo; Friend Website Link</a></li>
+                </ul>
+              </div>
+              <div class="section3_bottom"></div>
+            </div>
+
+          </div>
+        </div>
+
+
+        <div id="bottom"></div>
+        <div id="footer"> <a href="#">Home</a> | <a href="#">FAQs</a> | <a href="#">Terms of Use</a> | <a
+            href="#">Privacy Policy</a> | <a href="#">Contact Us</a> <br />
+          Copyright © 2008 <a href="#">Your Company Name</a> | Designed by <a href="#">templatemo.com</a> </div>
+      </div>
+    </div>
+  </div>
+  <div align=center>This template downloaded form <a href='http://all-free-download.com/free-website-templates/'>free
+      website templates</a></div>
+</body>
+
+</body>
+
+</html>
