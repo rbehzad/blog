@@ -1,13 +1,13 @@
-from django.http.response import HttpResponse, HttpResponseNotFound
-from django.shortcuts import get_object_or_404, render
-from django.views.generic import ListView, DetailView
+from django.http.response import HttpResponse
+from django.shortcuts import render
+from django.views.generic import ListView
 
 from post.models import Category, Post
 
 
 class HomeListView(ListView):
     model = Post
-    template_name = 'home.html'
+    template_name = 'post/home.html'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['posts'] = Post.objects.all().order_by('-created_at')
@@ -29,7 +29,7 @@ def post_detail(request, slug_text):
         'comments': comments,
         'categories': categories,
     }
-    return render(request, 'post_detail.html', context)
+    return render(request, 'post/post_detail.html', context)
 
 
 def class_category(request, slug_text):
@@ -41,4 +41,4 @@ def class_category(request, slug_text):
         'posts': posts,
         'categories': categories,
     }
-    return render(request, 'category.html', context)
+    return render(request, 'post/category.html', context)
