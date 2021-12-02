@@ -37,7 +37,7 @@ class Post(models.Model):
 
     author = models.ForeignKey(Account, on_delete=CASCADE)
     category = models.ManyToManyField(Category)
-    tag = models.ManyToManyField(Tag)
+    tag = models.ManyToManyField(Tag, blank=True, null=True)
 
     class Meta:
         unique_together = ('title', 'slug')

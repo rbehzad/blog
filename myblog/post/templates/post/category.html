@@ -6,6 +6,14 @@
   Reza's Blog - category
 {% endblock title %}
 
+{% block menu %}
+<ul>
+  <li><a href="#" class="current">Home</a></li>
+  <li><a href="#">About</a></li>
+  <li><a href="#">Login</a></li>
+  <li><a href="#">Register</a></li>
+</ul>
+{% endblock menu %}
 
 {% block content %} 
   {% for post in posts %}

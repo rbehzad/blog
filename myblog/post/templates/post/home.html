@@ -6,7 +6,15 @@
   Reza's Blog - home
 {% endblock title %}
 
-<!-- put post in loop -->
+{% block menu %}
+<ul>
+  <li><a href="#" class="current">Home</a></li>
+  <li><a href="#">About</a></li>
+  <li><a href="#">Login</a></li>
+  <li><a href="#">Register</a></li>
+</ul>
+{% endblock menu %}
+
 
 {% block content %} 
   {% for post in posts %}
