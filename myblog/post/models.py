@@ -30,7 +30,7 @@ class Category(models.Model):
 
 class Post(models.Model):
     title = models.CharField(max_length=120)
-    image = models.ImageField(upload_to="post/images/", blank=True)
+    image = models.ImageField(upload_to="", blank=True)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     slug = models.SlugField(unique=True, max_length=120, null=True, blank=True)
