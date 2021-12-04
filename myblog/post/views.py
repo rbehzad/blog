@@ -1,9 +1,9 @@
 from django.http.response import HttpResponse
-from django.shortcuts import render
 from django.views.generic import ListView
-
+from django.shortcuts import redirect, render
+from django.contrib.auth import authenticate, login, logout
 from post.models import Category, Post
-
+from django.contrib.auth.decorators import login_required
 
 class HomeListView(ListView):
     model = Post
@@ -42,3 +42,28 @@ def class_category(request, slug_text):
         'categories': categories,
     }
     return render(request, 'post/category.html', context)
+
+
+# login
+@login_required(login_url='login')
+def dashboard(request):
+    user = request.user
+    return render(request, 'post/dashboard.html', {})
+
+def logoutUser(request):
+    logout(request)
+    return redirect('login')
+
+def loginUser(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+
+        # if user authenticated below function return user object
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            # this is gonna create that session and put into that coockies
+            login(request, user)
+            return redirect('dashboard')
+
+    return render(request, 'post/login_register.html')

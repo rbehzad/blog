@@ -1,9 +1,7 @@
+from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.deletion import CASCADE
-from django.urls import reverse
-
 from django.db.models.signals import pre_save
-from account.models import Account
 from myblog.utils import unique_slug_generator
 
 
@@ -35,7 +33,7 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     slug = models.SlugField(unique=True, max_length=120, null=True, blank=True)
 
-    author = models.ForeignKey(Account, on_delete=CASCADE)
+    author = models.ForeignKey(User, on_delete=CASCADE)
     category = models.ManyToManyField(Category)
     tag = models.ManyToManyField(Tag, blank=True, null=True)
 

@@ -1,7 +1,7 @@
 {% extends "post/class_base.html" %}
 {% load static %}
 
-{% block title %}{% endblock title %}
+{% block title %}Dashboard{% endblock title %}
 
 
 {% block menu %}
@@ -10,11 +10,16 @@
   <li><a href="#">Add New Post</a></li>
   <li><a href="#">About</a></li>
   <li><a href="#">Account</a></li>
-  <li><a href="#">Logout</a></li>
+  <li><a href="{% url 'logout' %}">Logout</a></li>
 </ul>
 {% endblock menu %}
 
 
 {% block content %}
+  {% if request.user.is_authenticated %}
+    <p>Hello {{request.user}}</p>
 
+
+
+  {% endif %}
 {% endblock content %}
