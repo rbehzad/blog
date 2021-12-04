@@ -41,15 +41,23 @@
             <!-- search -->
             <div class="section">
               <form method="get" action="#">
-                <input name="search" type="text" value="Search Anything" id="keyword" />
+                <input name="search" type="text" placeholder="Search Anything" id="keyword" />
                 <input type="submit" value="Go" class="button" />
               </form>
             </div>
 
             <!-- Categories -->
             <div class="section">
+              
               <div class="section1_top"></div>
               <div class="section1_middle">
+
+                <!-- TODO -->
+                {% if request.user.is_authenticated %}
+                <ul><li><strong><a href="#">Add New Category</a></strong></li></ul>
+                {% endif %}
+
+
                 <h2>Categories</h2>
                 <ul>
                   {% for cate in categories %}

@@ -6,26 +6,40 @@
 {% endblock title %}
 
 {% block menu %}
+{% if request.user.is_authenticated %}
 <ul>
-  <li><a href="#" class="current">Home</a></li>
-  <li><a href="#">About</a></li>
-  <li><a href="#">Login</a></li>
-  <li><a href="#">Register</a></li>
+    <li><a href="{% url 'home' %}">Home</a></li>
+    <li><a href="#">About</a></li>
+    <li><a href="#">Add New Post</a></li>
+    <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+    <li><a href="{% url 'logout' %}">Logout</a></li>
 </ul>
+
+{% else %}
+<ul>
+    <li><a href="{% url 'home' %}">Home</a></li>
+    <li><a href="#">About</a></li>
+    <li><a href="{% url 'login' %}">Login</a></li>
+    <li><a href="{% url 'register' %}">Register</a></li>
+</ul>
+{% endif %}
+
 {% endblock menu %}
 
 
 {% block content %}
     <div class="postbody">
-        <h1>{{post.title}}</h1>
-        <div class="publish_info">Post Date: {{post.created_at}} ··· Categories: <a href="#">{% for category_ in post.category.all %}{{category_.title}}{% endfor %}</a></div>
-        <p><img src='{{post.image}}'/></p>
-        <br>
+        <h1>{{post.title}}</h1><br><br>
+        <div class="publish_info">Post Date: {{post.created_at}} ··· Categories: <a href="#">{% for category_ in post.category.all %}{{category_.title}}{% endfor %}</a></div><br>
+        <img src='{{post.image}}'/><p>{{post.content}}</p>
     </div>
-    <hr>
-    <hr>
+    <br>
+    <br>
     <div class="comment">
         <h2>Comments:</h2>
+        {% if request.user.is_authenticated %}
+        <!-- commenting section          TODO-->
+        {% endif %}
         {% for comment in comments %}
             <h1>{{comment.title}}</h1>
             <div class="publish_info">Post Date: {{comment.created_at}}</div>

@@ -15,12 +15,12 @@ class Tag(models.Model):
 
 class Category(models.Model):
     title = models.CharField(max_length=120)
-    slug = models.SlugField(unique=True, max_length=120, null=True)
+    slug = models.SlugField(unique=True, max_length=120, null=True, blank=True)
 
     parent = models.ForeignKey('self', on_delete=models.PROTECT, blank=True, null=True)
 
-    # def get_absolute_url(self):
-    #     return reverse('category_reverse', kwargs={'slug': self.slug})
+    class Meta:
+        unique_together = ('title', 'slug')
 
     def __str__(self):
         return f"category: {self.title}"
@@ -60,3 +60,10 @@ def slug_generator(sender, instance, *args, **kwargs):
         instance.slug = unique_slug_generator(instance)
 
 pre_save.connect(slug_generator, sender=Post)
+
+
+def slug_generator(sender, instance, *args, **kwargs):
+    if not instance.slug:
+        instance.slug = unique_slug_generator(instance)
+
+pre_save.connect(slug_generator, sender=Category)
