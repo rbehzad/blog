@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
-from post.models import Post
+from post.models import Category, Post, Tag
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -34,7 +34,33 @@ class AddPost(forms.ModelForm):
          }
          widgets = {
              'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Title...'}),
-             'category': forms.SelectMultiple(attrs={'class': 'form-select', 'placeholder': 'Enter Category...'}),
+             'category': forms.SelectMultiple(attrs={'class': 'form-select', 'placeholder': 'Choose Category...'}),
              'content': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Enter Content...'}),
-             'tag': forms.SelectMultiple(attrs={'class': 'form-select', 'placeholder': 'Enter Tag...'}),
+             'tag': forms.SelectMultiple(attrs={'class': 'form-select', 'placeholder': 'Choose Tag...'}),
+         }
+
+
+class AddCategory(forms.ModelForm):
+     class Meta:
+         model = Category
+         fields = ('title', 'parent')
+         labels = {
+             'title': '',
+             'parent': 'Parent',
+         }
+         widgets = {
+             'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Title...'}),
+             'parent': forms.Select(attrs={'class': 'form-select', 'placeholder': 'Choose Parent...'}),
+         }
+
+
+class AddTag(forms.ModelForm):
+     class Meta:
+         model = Tag
+         fields = ('title', )
+         labels = {
+             'title': '',
+         }
+         widgets = {
+             'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Title...'}),
          }

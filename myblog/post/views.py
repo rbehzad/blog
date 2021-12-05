@@ -6,7 +6,7 @@ from django.views.generic import ListView
 
 from post.models import Category, Post, Tag
 
-from .forms import AddPost, CustomUserCreationForm
+from .forms import AddCategory, AddPost, AddTag, CustomUserCreationForm
 
 
 class HomeListView(ListView):
@@ -16,11 +16,13 @@ class HomeListView(ListView):
         context = super().get_context_data(**kwargs)
         context['posts'] = Post.objects.all().order_by('-created_at')
         context['categories'] = Category.objects.all()
+        context['tags'] = Tag.objects.all()
         return context
 
 def post_detail(request, slug_text):
     post = Post.objects.filter(slug = slug_text)
     categories = Category.objects.all()
+    tags = Tag.objects.all()
     if post.exists():
         post = post.first()
     else:
@@ -31,6 +33,7 @@ def post_detail(request, slug_text):
         'post': post,
         'comments': comments,
         'categories': categories,
+        'tags': tags,
     }
 
     return render(request, 'post/post_detail.html', context)
@@ -39,10 +42,11 @@ def class_category(request, slug_text):
     cate = Category.objects.get(slug=slug_text)
     posts = Post.objects.filter(category=cate).order_by('-created_at')
     categories = Category.objects.all()
-
+    tags = Tag.objects.all()
     context = {
         'posts': posts,
         'categories': categories,
+        'tags': tags,
     }
 
     return render(request, 'post/category.html', context)
@@ -54,7 +58,8 @@ def dashboard(request):
     user = request.user
     posts = Post.objects.filter(author=user).order_by('-created_at')
     categories = Category.objects.all()
-    context = {'posts': posts, 'categories': categories}
+    tags = Tag.objects.all()
+    context = {'posts': posts, 'categories': categories, 'tags': tags}
     return render(request, 'post/dashboard.html', context)
 
 
@@ -96,7 +101,9 @@ def registerUser(request):
 
 @login_required(login_url='login')
 def addPost(request):
+    page = 'add_post'
     categories = Category.objects.all()
+    tags = Tag.objects.all()
     form = AddPost()
     if request.method == 'POST':
         form = AddPost(request.POST, request.FILES)
@@ -109,5 +116,45 @@ def addPost(request):
         if 'submitted' in request.GET:
             submitted = True
 
-    context = {'categories': categories, 'form': form}
-    return render(request, 'post/add_post.html', context)
+    context = {'categories': categories, 'form': form, 'page': page, 'tags': tags}
+    return render(request, 'post/add.html', context)
+
+
+@login_required(login_url='login')
+def addCategory(request):
+    page = 'add_category'
+    categories = Category.objects.all()
+    tags = Tag.objects.all()
+    form = AddCategory()
+    if request.method == 'POST':
+        form = AddCategory(request.POST)
+        if form.is_valid():
+            category = form.save(commit=False)
+            category.save()
+            return redirect(dashboard)
+    else:
+        if 'submitted' in request.GET:
+            submitted = True
+
+    context = {'categories': categories, 'form': form, 'page': page, 'tags': tags}
+    return render(request, 'post/add.html', context)
+
+
+@login_required(login_url='login')
+def addTag(request):
+    page = 'add_tag'
+    categories = Category.objects.all()
+    tags = Tag.objects.all()
+    form = AddTag()
+    if request.method == 'POST':
+        form = AddTag(request.POST)
+        if form.is_valid():
+            tag = form.save(commit=False)
+            tag.save()
+            return redirect(dashboard)
+    else:
+        if 'submitted' in request.GET:
+            submitted = True
+
+    context = {'form': form, 'page': page, 'categories': categories, 'tags': tags}
+    return render(request, 'post/add.html', context)

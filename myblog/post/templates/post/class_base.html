@@ -52,11 +52,12 @@
               <div class="section1_top"></div>
               <div class="section1_middle">
 
-                <!-- TODO -->
                 {% if request.user.is_authenticated %}
-                <ul><li><strong><a href="#">Add New Category</a></strong></li></ul>
+                <ul>
+                  <li><strong><a href="{% url 'add_category' %}">Add New Category</a></strong></li>
+                  <li><strong><a href="{% url 'delete_category' %}">Delete Category</a></strong></li>
+                </ul>
                 {% endif %}
-
 
                 <h2>Categories</h2>
                 <ul>
@@ -69,15 +70,24 @@
             </div>
 
 
-            <!-- Archives -->
+            <!-- Tags -->
             <div class="section">
+              
               <div class="section2_top"></div>
               <div class="section2_middle">
-                <h2>Archives</h2>
+
+                {% if request.user.is_authenticated %}
                 <ul>
-                  <li><a href="#">&raquo; Suspendisse potenti</a></li>
-                  <li><a href="#">&raquo; Aliquam tristique lacus</a></li>
-                  <li><a href="#">&raquo; Duis pulvinar scelerisque ante</a></li>
+                  <li><strong><a href="{% url 'add_tag' %}">Add New Tag</a></strong></li>
+                  <li><strong><a href="{% url 'delete_tag' %}">Delete Tag</a></strong></li>
+                </ul>
+                {% endif %}
+
+                <h2>Tags</h2>
+                <ul>
+                  {% for tag in tags %}
+                  <li>{{tag.title}}</li>
+                  {% endfor %}
                 </ul>
               </div>
               <div class="section2_bottom"></div>
@@ -87,12 +97,7 @@
             <div class="section">
               <div class="section3_top"></div>
               <div class="section3_middle">
-                <h2>Quick Links</h2>
-                <ul>
-                  <li><a href="#">&raquo; External Web Link One</a></li>
-                  <li><a href="#">&raquo; Website Link Two</a></li>
-                  <li><a href="#">&raquo; Friend Website Link</a></li>
-                </ul>
+                
               </div>
               <div class="section3_bottom"></div>
             </div>
