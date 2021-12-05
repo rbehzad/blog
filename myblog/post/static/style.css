@@ -268,8 +268,7 @@ img {
 }
 /* ----- End of Post ------ */
 
-/* ----- Form ----- */
-form {
+.search {
 	width: 190px;
 	margin: 0px;
 	padding: 13px 0px 0px 10px;

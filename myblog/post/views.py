@@ -1,12 +1,12 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.http.response import HttpResponse
+from django.http.response import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.views.generic import ListView
 
-from post.models import Category, Post
+from post.models import Category, Post, Tag
 
-from .forms import CustomUserCreationForm
+from .forms import AddPost, CustomUserCreationForm
 
 
 class HomeListView(ListView):
@@ -94,35 +94,50 @@ def registerUser(request):
     context = {'form': form, 'page': page}
     return render(request, 'post/login_register.html', context)
 
-
 @login_required(login_url='login')
 def addPost(request):
-    user = request.user
-
     categories = Category.objects.all()
-
+    form = AddPost()
     if request.method == 'POST':
-        data = request.POST
-        images = request.FILES.getlist('images')
+        form = AddPost(request.POST, request.FILES)
+        if form.is_valid():
+            post = form.save()
+            post.save()
+            return HttpResponseRedirect('dashboard')
+    else:
+        if 'submitted' in request.GET:
+            submitted = True
 
-        if data['category'] != 'none':
-            category = Category.objects.get(id=data['category'])
-        elif data['category_new'] != '':
-            category, created = Category.objects.get_or_create(
-                name=data['category_new'])
-        else:
-            category = None
-
-        for image in images:
-            post = Post.objects.create(
-                author=request.user,
-                content=data['content'],
-                category=category,
-                title=data['title'],
-                image=image,
-            )
-
-        return redirect('dashboard')
-
-    context = {'categories': categories}
+    context = {'categories': categories, 'form': form}
     return render(request, 'post/add_post.html', context)
+
+
+
+
+# @login_required(login_url='login')
+# def addPost(request):
+#     categories = Category.objects.all()
+#     tags = Tag.objects.all()
+
+#     if request.method == 'POST':
+#         data = request.POST
+#         images = request.FILES.getlist('images') # return a list
+        
+#         if data['category'] != 'none':
+#             category = Category.objects.get(id=data['category'])
+#         elif data['category_new'] != '':
+#             category = Category.objects.get_or_create(
+#                 name=data['category_new'])
+
+#         post = Post.objects.create(
+#             author=request.user,
+#             content=data['content'],
+#             category=category,
+#             title=data['title'],
+#             image=images[0],
+#         )
+
+#         return redirect('dashboard')
+
+#     context = {'categories': categories, 'tags': tags}
+#     return render(request, 'post/add_post.html', context)

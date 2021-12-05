@@ -1,6 +1,8 @@
-from django.forms import ModelForm, fields
-from django.contrib.auth.models import User
+from django import forms
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+
+from post.models import Post
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -16,3 +18,23 @@ class CustomUserCreationForm(UserCreationForm):
             {'class': 'form-control', 'placeholder': 'Enter password...'})
         self.fields['password2'].widget.attrs.update(
             {'class': 'form-control', 'placeholder': 'Confirm password...'})
+
+
+
+class AddPost(forms.ModelForm):
+     class Meta:
+         model = Post
+         fields = ('title', 'category', 'content', 'tag', 'image')
+         labels = {
+             'title': '',
+             'category': '',
+             'content': '',
+             'tag': '',
+             'image': '',
+         }
+         widgets = {
+             'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Title...'}),
+             'category': forms.SelectMultiple(attrs={'class': 'form-control', 'placeholder': 'Enter Category...'}),
+             'content': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Content...'}),
+             'tag': forms.SelectMultiple(attrs={'class': 'form-control', 'placeholder': 'Enter Tag...'}),
+         }
