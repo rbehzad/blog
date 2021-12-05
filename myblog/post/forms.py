@@ -27,14 +27,14 @@ class AddPost(forms.ModelForm):
          fields = ('title', 'category', 'content', 'tag', 'image')
          labels = {
              'title': '',
-             'category': '',
+             'category': 'Category',
              'content': '',
-             'tag': '',
+             'tag': 'Tag',
              'image': '',
          }
          widgets = {
              'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Title...'}),
-             'category': forms.SelectMultiple(attrs={'class': 'form-control', 'placeholder': 'Enter Category...'}),
-             'content': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Content...'}),
-             'tag': forms.SelectMultiple(attrs={'class': 'form-control', 'placeholder': 'Enter Tag...'}),
+             'category': forms.SelectMultiple(attrs={'class': 'form-select', 'placeholder': 'Enter Category...'}),
+             'content': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Enter Content...'}),
+             'tag': forms.SelectMultiple(attrs={'class': 'form-select', 'placeholder': 'Enter Tag...'}),
          }

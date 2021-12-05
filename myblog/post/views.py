@@ -37,7 +37,7 @@ def post_detail(request, slug_text):
 
 def class_category(request, slug_text):
     cate = Category.objects.get(slug=slug_text)
-    posts = Post.objects.filter(category=cate)
+    posts = Post.objects.filter(category=cate).order_by('-created_at')
     categories = Category.objects.all()
 
     context = {
@@ -52,7 +52,7 @@ def class_category(request, slug_text):
 @login_required(login_url='login')
 def dashboard(request):
     user = request.user
-    posts = Post.objects.filter(author=user)
+    posts = Post.objects.filter(author=user).order_by('-created_at')
     categories = Category.objects.all()
     context = {'posts': posts, 'categories': categories}
     return render(request, 'post/dashboard.html', context)
@@ -74,7 +74,7 @@ def loginUser(request):
         if user is not None:
             # this is gonna create that session and put into that coockies
             login(request, user)
-            return redirect('dashboard')
+            return redirect(dashboard)
 
     return render(request, 'post/login_register.html', context)
 
@@ -89,7 +89,7 @@ def registerUser(request):
 
             if user is not None:
                 login(request, user)
-                return redirect('dashboard')
+                return redirect(dashboard)
         
     context = {'form': form, 'page': page}
     return render(request, 'post/login_register.html', context)
@@ -101,43 +101,13 @@ def addPost(request):
     if request.method == 'POST':
         form = AddPost(request.POST, request.FILES)
         if form.is_valid():
-            post = form.save()
+            post = form.save(commit=False)
+            post.author = request.user
             post.save()
-            return HttpResponseRedirect('dashboard')
+            return redirect(dashboard)
     else:
         if 'submitted' in request.GET:
             submitted = True
 
     context = {'categories': categories, 'form': form}
     return render(request, 'post/add_post.html', context)
-
-
-
-
-# @login_required(login_url='login')
-# def addPost(request):
-#     categories = Category.objects.all()
-#     tags = Tag.objects.all()
-
-#     if request.method == 'POST':
-#         data = request.POST
-#         images = request.FILES.getlist('images') # return a list
-        
-#         if data['category'] != 'none':
-#             category = Category.objects.get(id=data['category'])
-#         elif data['category_new'] != '':
-#             category = Category.objects.get_or_create(
-#                 name=data['category_new'])
-
-#         post = Post.objects.create(
-#             author=request.user,
-#             content=data['content'],
-#             category=category,
-#             title=data['title'],
-#             image=images[0],
-#         )
-
-#         return redirect('dashboard')
-
-#     context = {'categories': categories, 'tags': tags}
-#     return render(request, 'post/add_post.html', context)
