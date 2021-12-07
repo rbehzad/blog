@@ -52,8 +52,23 @@
         {% endif %}
         <br><br>
 
+    {% elif page == 'update_category'%}
+        <h1>Update Category</h1><br><br>
 
-        {% elif page == 'add_tag'%}
+        {% if submitted %}
+            succesfully
+
+        {% else %}
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p}}
+
+                <input type="submit" value="Update" class="btn btn-secondary">
+            </form>
+        {% endif %}
+        <br><br>
+
+    {% elif page == 'add_tag'%}
         <h1>Add New Tag</h1><br><br>
 
         {% if submitted %}
@@ -69,6 +84,21 @@
         {% endif %}
         <br><br>
 
+    {% elif page == 'update_tag'%}
+        <h1>Update Tag</h1><br><br>
+
+        {% if submitted %}
+            succesfully
+
+        {% else %}
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p}}
+
+                <input type="submit" value="Update" class="btn btn-secondary">
+            </form>
+        {% endif %}
+        <br><br>
     {% endif %}
 
 {% endif %}

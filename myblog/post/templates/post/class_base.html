@@ -55,7 +55,7 @@
                 <h2>Categories</h2>
                 <ul>
                   {% for cate in categories %}
-                  <li><a href='/blog/category/{{cate.slug}}'>{{cate.title}}</a></li>
+                  <li><a href="{% url 'category_reverse' cate.slug %}">{{cate.title}}</a></li>
                   {% endfor %}
                 </ul>
               </div>

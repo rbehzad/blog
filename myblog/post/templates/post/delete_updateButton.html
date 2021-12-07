@@ -19,24 +19,30 @@
   {% if request.user.is_authenticated %}
 
     {% if page == 'categories' %}
+      <hr>
+      <span><a href="{% url 'add_category' %}" class="btn btn-outline-secondary btn-sm">Add New Category</a></span>
+      <hr>
       {% for category in categories %}
       <div class="postbody">
       <h1>{{category.title}}</h1><br><br>
       <span><a href="{% url 'delete_category' category.slug %}" class="btn btn-outline-danger btn-sm">Delete Category</a></span>
+      <span><a href="{% url 'update_category' category.slug %}" class="btn btn-outline-danger btn-sm">Update Category</a></span>
       <span></span>
       </div>
       {% endfor %}
-      <span><a href="{% url 'add_category' %}" class="btn btn-outline-secondary btn-sm">Add New Category</a></span>
 
 
     {% elif page == 'tags' %}
+      <hr>
+      <span><a href="{% url 'add_tag' %}" class="btn btn-outline-secondary btn-sm">Add New Tag</a></span>
+      <hr>
       {% for tag in tags %}
       <div class="postbody">
       <h1>{{tag.title}}</h1><br><br>
       <span><a href="{% url 'delete_tag' tag.slug %}" class="btn btn-outline-danger btn-sm">Delete Tag</a></span>
+      <span><a href="{% url 'update_tag' tag.slug %}" class="btn btn-outline-danger btn-sm">Update Tag</a></span>
       </div>
       {% endfor %}
-      <span><a href="{% url 'add_tag' %}" class="btn btn-outline-secondary btn-sm">Add New Tag</a></span>
 
     {% endif %}
 

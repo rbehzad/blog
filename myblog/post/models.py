@@ -7,7 +7,7 @@ from myblog.utils import unique_slug_generator
 
 class Tag(models.Model):
     title = models.CharField(max_length=120)
-    slug = models.SlugField(unique=True, max_length=120, null=True)
+    slug = models.SlugField(unique=True, max_length=120, null=True, blank=True)
 
     class Meta:
         unique_together = ('title', 'slug')
@@ -63,17 +63,5 @@ def slug_generator(sender, instance, *args, **kwargs):
         instance.slug = unique_slug_generator(instance)
 
 pre_save.connect(slug_generator, sender=Post)
-
-
-def slug_generator(sender, instance, *args, **kwargs):
-    if not instance.slug:
-        instance.slug = unique_slug_generator(instance)
-
 pre_save.connect(slug_generator, sender=Category)
-
-
-def slug_generator(sender, instance, *args, **kwargs):
-    if not instance.slug:
-        instance.slug = unique_slug_generator(instance)
-
 pre_save.connect(slug_generator, sender=Tag)

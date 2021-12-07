@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.http import request
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.views.generic import ListView
@@ -122,7 +123,7 @@ def addPost(request):
             submitted = True
 
     context = {'categories': categories, 'form': form, 'page': page, 'tags': tags}
-    return render(request, 'post/add.html', context)
+    return render(request, 'post/add_update.html', context)
 
 
 @login_required(login_url='login')
@@ -142,7 +143,7 @@ def addCategory(request):
             submitted = True
 
     context = {'categories': categories, 'form': form, 'page': page, 'tags': tags}
-    return render(request, 'post/add.html', context)
+    return render(request, 'post/add_update.html', context)
 
 
 @login_required(login_url='login')
@@ -162,7 +163,7 @@ def addTag(request):
             submitted = True
 
     context = {'form': form, 'page': page, 'categories': categories, 'tags': tags}
-    return render(request, 'post/add.html', context)
+    return render(request, 'post/add_update.html', context)
 
 
 @login_required(login_url='login')
@@ -175,20 +176,7 @@ def categoryList(request):
         'tags': tags,
         'page': page,
     }
-    return render(request, 'post/delete_update.html', context)
-
-  
-@login_required(login_url='login')
-def tagList(request):
-    page = 'tags'
-    categories = Category.objects.all()
-    tags = Tag.objects.all()
-    context = {
-        'categories': categories,
-        'tags': tags,
-        'page': page,
-    }
-    return render(request, 'post/delete_update.html', context)
+    return render(request, 'post/delete_updateButton.html', context)
 
 
 @login_required(login_url='login')
@@ -199,7 +187,54 @@ def deleteCategory(requset, slug):
 
 
 @login_required(login_url='login')
-def deleteTag(requset, slug):
+def updateCategory(request, slug):
+    page = 'update_category'
+    categories = Category.objects.all()
+    tags = Tag.objects.all()
+    category = Category.objects.get(slug=slug)
+    form = AddCategory()
+    if request.method == 'POST':
+        form = AddCategory(request.POST, instance=category)
+        if form.is_valid():
+            form.save()
+            return redirect('categories')
+
+    context = {'form': form, 'page': page, 'categories': categories, 'tags': tags}
+    return render(request, 'post/add_update.html', context)
+
+
+@login_required(login_url='login')
+def tagList(request):
+    page = 'tags'
+    categories = Category.objects.all()
+    tags = Tag.objects.all()
+    context = {
+        'categories': categories,
+        'tags': tags,
+        'page': page,
+    }
+    return render(request, 'post/delete_updateButton.html', context)
+
+
+@login_required(login_url='login')
+def deleteTag(request, slug):
     tag = Tag.objects.get(slug=slug)
     tag.delete()
     return redirect('tags')
+
+
+@login_required(login_url='login')
+def updateTag(request, slug):
+    page = 'update_tag'
+    categories = Category.objects.all()
+    tags = Tag.objects.all()
+    tag = Tag.objects.get(slug=slug)
+    form = AddTag()
+    if request.method == 'POST':
+        form = AddTag(request.POST, instance=tag)
+        if form.is_valid():
+            form.save()
+            return redirect('tags')
+
+    context = {'form': form, 'page': page, 'categories': categories, 'tags': tags}
+    return render(request, 'post/add_update.html', context)
