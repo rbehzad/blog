@@ -14,6 +14,8 @@ urlpatterns = [
     path('add-category/', addCategory, name='add_category'),
     path('add-tag/', addTag, name='add_tag'),
     
-    path('delete-category/', deleteCategory, name='delete_category'),
-    path('delete-tag/', deleteTag, name='delete_tag'),
+    path('categories/', categoryList, name='categories'),
+    path('delete-category/<slug:slug>', deleteCategory, name='delete_category'),
+    path('tags/', tagList, name='tags'),
+    path('tags/<slug:slug>', deleteTag, name='delete_tag'),
 ]

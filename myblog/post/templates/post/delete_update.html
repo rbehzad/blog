@@ -1,0 +1,44 @@
+{% extends "post/class_base.html" %}
+{% load static %}
+
+{% block title %}{{request.user}}'s page{% endblock title %}
+
+
+{% block menu %}
+<ul>
+    <li><a href="{% url 'home' %}">Home</a></li>
+    <li><a href="#">About</a></li>
+    <li><a href="{% url 'add_post' %}">Add New Post</a></li>
+    <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+    <li><a href="{% url 'logout' %}">Logout</a></li>
+</ul>
+{% endblock menu %}
+
+
+{% block content %}
+  {% if request.user.is_authenticated %}
+
+    {% if page == 'categories' %}
+      {% for category in categories %}
+      <div class="postbody">
+      <h1>{{category.title}}</h1><br><br>
+      <span><a href="{% url 'delete_category' category.slug %}" class="btn btn-outline-danger btn-sm">Delete Category</a></span>
+      <span></span>
+      </div>
+      {% endfor %}
+      <span><a href="{% url 'add_category' %}" class="btn btn-outline-secondary btn-sm">Add New Category</a></span>
+
+
+    {% elif page == 'tags' %}
+      {% for tag in tags %}
+      <div class="postbody">
+      <h1>{{tag.title}}</h1><br><br>
+      <span><a href="{% url 'delete_tag' tag.slug %}" class="btn btn-outline-danger btn-sm">Delete Tag</a></span>
+      </div>
+      {% endfor %}
+      <span><a href="{% url 'add_tag' %}" class="btn btn-outline-secondary btn-sm">Add New Tag</a></span>
+
+    {% endif %}
+
+  {% endif %}
+{% endblock content %}

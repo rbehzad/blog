@@ -30,7 +30,8 @@
 {% block content %}
     <div class="postbody">
         <h1>{{post.title}}</h1><br><br>
-        <div class="publish_info">Post Date: {{post.created_at}} ··· Categories: <a href="#">{% for category_ in post.category.all %}{{category_.title}}{% endfor %}</a></div><br>
+        <div class="publish_info">Post Date: {{post.created_at}} ··· Categories: <a href="#">{% for category_ in post.category.all %}{{category_.title}}, {% endfor %}</a></div>
+        <div class="publish_info">Tags: {% for tag_ in post.tag.all %}{{tag_.title}}, {% endfor %}</div><br>
         <img src='{{post.image.url}}'/><p>{{post.content}}</p>
     </div>
     <br>

@@ -52,13 +52,6 @@
               <div class="section1_top"></div>
               <div class="section1_middle">
 
-                {% if request.user.is_authenticated %}
-                <ul>
-                  <li><strong><a href="{% url 'add_category' %}">Add New Category</a></strong></li>
-                  <li><strong><a href="{% url 'delete_category' %}">Delete Category</a></strong></li>
-                </ul>
-                {% endif %}
-
                 <h2>Categories</h2>
                 <ul>
                   {% for cate in categories %}
@@ -76,13 +69,6 @@
               <div class="section2_top"></div>
               <div class="section2_middle">
 
-                {% if request.user.is_authenticated %}
-                <ul>
-                  <li><strong><a href="{% url 'add_tag' %}">Add New Tag</a></strong></li>
-                  <li><strong><a href="{% url 'delete_tag' %}">Delete Tag</a></strong></li>
-                </ul>
-                {% endif %}
-
                 <h2>Tags</h2>
                 <ul>
                   {% for tag in tags %}
@@ -93,11 +79,18 @@
               <div class="section2_bottom"></div>
             </div>
 
-            <!-- Quick Links -->
+            <!-- Edit -->
             <div class="section">
               <div class="section3_top"></div>
               <div class="section3_middle">
-                
+
+                {% if request.user.is_authenticated %}
+                <ul>
+                  <li><strong><a href="{% url 'categories' %}">Edit Category</a></strong></li>
+                  <li><strong><a href="{% url 'tags' %}">Edit Tag</a></strong></li>
+                </ul>
+                {% endif %}
+
               </div>
               <div class="section3_bottom"></div>
             </div>

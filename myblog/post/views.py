@@ -39,8 +39,8 @@ def post_detail(request, slug_text):
     return render(request, 'post/post_detail.html', context)
 
 def class_category(request, slug_text):
-    cate = Category.objects.get(slug=slug_text)
-    posts = Post.objects.filter(category=cate).order_by('-created_at')
+    category = Category.objects.get(slug=slug_text)
+    posts = Post.objects.filter(category=category).order_by('-created_at')
     categories = Category.objects.all()
     tags = Tag.objects.all()
     context = {
@@ -59,7 +59,11 @@ def dashboard(request):
     posts = Post.objects.filter(author=user).order_by('-created_at')
     categories = Category.objects.all()
     tags = Tag.objects.all()
-    context = {'posts': posts, 'categories': categories, 'tags': tags}
+    context = {
+        'posts': posts,
+        'categories': categories,
+        'tags': tags,
+    }
     return render(request, 'post/dashboard.html', context)
 
 
@@ -111,6 +115,7 @@ def addPost(request):
             post = form.save(commit=False)
             post.author = request.user
             post.save()
+            form.save_m2m()
             return redirect(dashboard)
     else:
         if 'submitted' in request.GET:
@@ -131,7 +136,7 @@ def addCategory(request):
         if form.is_valid():
             category = form.save(commit=False)
             category.save()
-            return redirect(dashboard)
+            return redirect('categories')
     else:
         if 'submitted' in request.GET:
             submitted = True
@@ -151,10 +156,50 @@ def addTag(request):
         if form.is_valid():
             tag = form.save(commit=False)
             tag.save()
-            return redirect(dashboard)
+            return redirect('tags')
     else:
         if 'submitted' in request.GET:
             submitted = True
 
     context = {'form': form, 'page': page, 'categories': categories, 'tags': tags}
     return render(request, 'post/add.html', context)
+
+
+@login_required(login_url='login')
+def categoryList(request):
+    page = 'categories'
+    categories = Category.objects.all()
+    tags = Tag.objects.all()
+    context = {
+        'categories': categories,
+        'tags': tags,
+        'page': page,
+    }
+    return render(request, 'post/delete_update.html', context)
+
+  
+@login_required(login_url='login')
+def tagList(request):
+    page = 'tags'
+    categories = Category.objects.all()
+    tags = Tag.objects.all()
+    context = {
+        'categories': categories,
+        'tags': tags,
+        'page': page,
+    }
+    return render(request, 'post/delete_update.html', context)
+
+
+@login_required(login_url='login')
+def deleteCategory(requset, slug):
+    category = Category.objects.get(slug=slug)
+    category.delete()
+    return redirect('categories')
+
+
+@login_required(login_url='login')
+def deleteTag(requset, slug):
+    tag = Tag.objects.get(slug=slug)
+    tag.delete()
+    return redirect('tags')
