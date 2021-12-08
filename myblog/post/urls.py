@@ -22,4 +22,6 @@ urlpatterns = [
     path('tags/', tagList, name='tags'),
     path('delete-tag/<slug:slug>', deleteTag, name='delete_tag'),
     path('update-tag/<slug:slug>', updateTag, name='update_tag'),
+
+    path('add-comment/<slug:slug>', addComment, name='add_comment'),
 ]

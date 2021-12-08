@@ -1,13 +1,13 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import request
-from django.http.response import HttpResponse, HttpResponseRedirect
+from django.http.response import HttpResponse
 from django.shortcuts import redirect, render
 from django.views.generic import ListView
+from django.urls import reverse
 
+from post.forms import *
 from post.models import Category, Post, Tag
-
-from .forms import AddCategory, AddPost, AddTag, CustomUserCreationForm
 
 
 class HomeListView(ListView):
@@ -84,7 +84,7 @@ def loginUser(request):
         if user is not None:
             # this is gonna create that session and put into that coockies
             login(request, user)
-            return redirect(dashboard)
+            return redirect('dashboard')
 
     return render(request, 'post/login_register.html', context)
 
@@ -100,7 +100,7 @@ def registerUser(request):
 
             if user is not None:
                 login(request, user)
-                return redirect(dashboard)
+                return redirect('dashboard')
         
     context = {'form': form, 'page': page}
     return render(request, 'post/login_register.html', context)
@@ -118,7 +118,7 @@ def addPost(request):
             post.author = request.user
             post.save()
             form.save_m2m()
-            return redirect(dashboard)
+            return redirect('dashboard')
     else:
         if 'submitted' in request.GET:
             submitted = True
@@ -137,6 +137,7 @@ def addCategory(request):
         form = AddCategory(request.POST)
         if form.is_valid():
             category = form.save(commit=False)
+            category.creator = request.user
             category.save()
             return redirect('categories')
     else:
@@ -157,6 +158,7 @@ def addTag(request):
         form = AddTag(request.POST)
         if form.is_valid():
             tag = form.save(commit=False)
+            tag.creator = request.user
             tag.save()
             return redirect('tags')
     else:
@@ -169,8 +171,9 @@ def addTag(request):
 
 @login_required(login_url='login')
 def categoryList(request):
+    user = request.user
     page = 'categories'
-    categories = Category.objects.all()
+    categories = Category.objects.filter(creator=user).order_by('-created_at')
     tags = Tag.objects.all()
     context = {
         'categories': categories,
@@ -240,9 +243,10 @@ def updateCategory(request, slug):
 
 @login_required(login_url='login')
 def tagList(request):
+    user = request.user
     page = 'tags'
     categories = Category.objects.all()
-    tags = Tag.objects.all()
+    tags = Tag.objects.filter(creator=user).order_by('-created_at')
     context = {
         'categories': categories,
         'tags': tags,
@@ -279,4 +283,27 @@ def updateTag(request, slug):
             return redirect('tags')
 
     context = {'form': form, 'page': page, 'categories': categories, 'tags': tags}
+    return render(request, 'post/add_update.html', context)
+
+
+
+def addComment(request, slug):
+    page = 'add_comment'
+    categories = Category.objects.all()
+    tags = Tag.objects.all()
+    form = AddComment()
+    if request.method == 'POST':
+        form = AddComment(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.author = request.user
+            comment.post = Post.objects.get(slug=slug)
+            comment.save()
+            return redirect(reverse('post_detail', args=[slug]))
+
+    else:
+        if 'submitted' in request.GET:
+            submitted = True
+
+    context = {'categories': categories, 'form': form, 'page': page, 'tags': tags}
     return render(request, 'post/add_update.html', context)

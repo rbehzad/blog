@@ -1,13 +1,16 @@
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.models.deletion import CASCADE
+from django.db.models.deletion import CASCADE, SET_NULL
 from django.db.models.signals import pre_save
+from django.utils import tree
 from myblog.utils import unique_slug_generator
 
 
 class Tag(models.Model):
     title = models.CharField(max_length=120)
     slug = models.SlugField(unique=True, max_length=120, null=True, blank=True)
+    creator = models.ForeignKey(User, on_delete=SET_NULL, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         unique_together = ('title', 'slug')
@@ -19,8 +22,9 @@ class Tag(models.Model):
 class Category(models.Model):
     title = models.CharField(max_length=120)
     slug = models.SlugField(unique=True, max_length=120, null=True, blank=True)
-
+    creator = models.ForeignKey(User, on_delete=SET_NULL, null=True, blank=True)
     parent = models.ForeignKey('self', on_delete=models.PROTECT, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         unique_together = ('title', 'slug')
@@ -31,7 +35,7 @@ class Category(models.Model):
 
 class Post(models.Model):
     title = models.CharField(max_length=120)
-    image = models.ImageField(upload_to="", blank=True)
+    image = models.ImageField(upload_to="")
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     slug = models.SlugField(unique=True, max_length=120, null=True, blank=True)
@@ -50,6 +54,7 @@ class Post(models.Model):
 class Comment(models.Model):
     title = models.CharField(max_length=120)
     content = models.TextField()
+    author = models.ForeignKey(User, on_delete=SET_NULL, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     post = models.ForeignKey(Post, on_delete=models.CASCADE)

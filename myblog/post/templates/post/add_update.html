@@ -99,6 +99,22 @@
             </form>
         {% endif %}
         <br><br>
+
+        {% elif page == 'add_comment'%}
+        <h1>Add Comment</h1><br><br>
+
+        {% if submitted %}
+            succesfully
+
+        {% else %}
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p}}
+
+                <input type="submit" value="Save" class="btn btn-secondary">
+            </form>
+        {% endif %}
+        <br><br>
     {% endif %}
 
 {% endif %}

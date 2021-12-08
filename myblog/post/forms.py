@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
-from post.models import Category, Post, Tag
+from post.models import Category, Comment, Post, Tag
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -63,4 +63,18 @@ class AddTag(forms.ModelForm):
          }
          widgets = {
              'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Title...'}),
+         }
+
+
+class AddComment(forms.ModelForm):
+     class Meta:
+         model = Comment
+         fields = ('title', 'content')
+         labels = {
+             'title': '',
+             'content': '',
+         }
+         widgets = {
+             'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Title...'}),
+             'content': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Enter Content...'}),
          }
