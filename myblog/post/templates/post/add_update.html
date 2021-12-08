@@ -18,7 +18,7 @@
 {% block content %}
 {% if request.user.is_authenticated %}
 
-    {% if page == 'add_post' %}
+    {% if page == 'add_post' or page == 'update_post' %}
         <h1>Add New Post</h1><br><br>
 
         {% if submitted %}
@@ -30,7 +30,7 @@
                 {{ form.media }}
                 {{ form.as_p}}
 
-                <input type="submit" value="Submit" class="btn btn-secondary">
+                <input type="submit" value="Save" class="btn btn-secondary">
             </form>
         {% endif %}
         <br><br>
@@ -47,7 +47,7 @@
                 {% csrf_token %}
                 {{ form.as_p}}
 
-                <input type="submit" value="Submit" class="btn btn-secondary">
+                <input type="submit" value="Save" class="btn btn-secondary">
             </form>
         {% endif %}
         <br><br>
@@ -63,7 +63,7 @@
                 {% csrf_token %}
                 {{ form.as_p}}
 
-                <input type="submit" value="Update" class="btn btn-secondary">
+                <input type="submit" value="Save" class="btn btn-secondary">
             </form>
         {% endif %}
         <br><br>
@@ -79,7 +79,7 @@
                 {% csrf_token %}
                 {{ form.as_p}}
 
-                <input type="submit" value="Submit" class="btn btn-secondary">
+                <input type="submit" value="Save" class="btn btn-secondary">
             </form>
         {% endif %}
         <br><br>
@@ -95,7 +95,7 @@
                 {% csrf_token %}
                 {{ form.as_p}}
 
-                <input type="submit" value="Update" class="btn btn-secondary">
+                <input type="submit" value="Save" class="btn btn-secondary">
             </form>
         {% endif %}
         <br><br>

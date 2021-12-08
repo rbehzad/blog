@@ -23,6 +23,8 @@
       <a href="{% url 'post_detail' post.slug %}"><h1>{{post.title}}</h1></a><br><br>
       <div class="publish_info">Post Date: {{post.created_at}} ··· Categories: {% for category_ in post.category.all %}{{category_.title}}, {% endfor %}</div>
       <div class="publish_info">Tags: {% for tag_ in post.tag.all %}{{tag_.title}}, {% endfor %}</div><br>
+      <span><a href="{% url 'delete_post' post.slug %}" class="btn btn-outline-danger btn-sm">Delete Post</a></span>
+      <span><a href="{% url 'update_post' post.slug %}" class="btn btn-outline-danger btn-sm">Update Post</a></span>
       <div class="comment"><a href="#">Comments ({{post.comment_set.count}})</a></div>
       </div>
       {% endfor %}

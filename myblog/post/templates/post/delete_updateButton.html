@@ -27,7 +27,6 @@
       <h1>{{category.title}}</h1><br><br>
       <span><a href="{% url 'delete_category' category.slug %}" class="btn btn-outline-danger btn-sm">Delete Category</a></span>
       <span><a href="{% url 'update_category' category.slug %}" class="btn btn-outline-danger btn-sm">Update Category</a></span>
-      <span></span>
       </div>
       {% endfor %}
 

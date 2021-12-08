@@ -13,6 +13,8 @@ urlpatterns = [
     path('add-post/', addPost, name='add_post'),
     path('add-category/', addCategory, name='add_category'),
     path('add-tag/', addTag, name='add_tag'),
+    path('delete-post/<slug:slug>', deletePost, name='delete_post'),
+    path('update-post/<slug:slug>', updatePost, name='update_post'),
     
     path('categories/', categoryList, name='categories'),
     path('delete-category/<slug:slug>', deleteCategory, name='delete_category'),

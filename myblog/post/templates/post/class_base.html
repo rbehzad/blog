@@ -28,6 +28,7 @@
           {% endblock menu %}
         </div>
 
+        
         <!-- posts -->
         <div id="content">
           <div id="left_column">
@@ -35,6 +36,7 @@
             {% endblock content %}
           </div>
 
+          {% if page != 'login' and page != 'register' %}
           <!-- right side -->
           <div id="right_column">
 
@@ -96,13 +98,16 @@
             </div>
 
           </div>
+          {% endif %}
         </div>
-
-
+        
+        
         <div id="bottom"></div>
         <div id="footer"> <a href="#">Home</a> | <a href="#">FAQs</a> | <a href="#">Terms of Use</a> | <a
             href="#">Privacy Policy</a> | <a href="#">Contact Us</a> <br />
-          Copyright © 2008 <a href="#">Your Company Name</a> | Designed by <a href="#">templatemo.com</a> </div>
+          Copyright © 2008 <a href="#">Virgool</a> | Designed by <a href="#"></a>
+        </div>
+        
       </div>
     </div>
   </div>

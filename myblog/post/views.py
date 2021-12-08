@@ -88,6 +88,7 @@ def loginUser(request):
 
     return render(request, 'post/login_register.html', context)
 
+
 def registerUser(request):
     page = 'register'
     form = CustomUserCreationForm()
@@ -177,6 +178,28 @@ def categoryList(request):
         'page': page,
     }
     return render(request, 'post/delete_updateButton.html', context)
+
+
+def deletePost(request, slug):
+    post = Post.objects.get(slug=slug)
+    post.delete()
+    return redirect('dashboard')
+
+
+def updatePost(request, slug):
+    page = 'update_post'
+    post = Post.objects.get(slug=slug)
+    categories = Category.objects.all()
+    tags = Tag.objects.all()
+    form = AddPost()
+    if request.method == 'POST':
+        form = AddPost(request.POST, instance=post)
+        if form.is_valid():
+            form.save()
+            return redirect('dashboard')
+
+    context = {'form': form, 'page': page, 'categories': categories, 'tags': tags}
+    return render(request, 'post/add_update.html', context)
 
 
 @login_required(login_url='login')
