@@ -181,9 +181,15 @@ def categoryList(request):
 
 
 def deletePost(request, slug):
+    page = 'post'
     post = Post.objects.get(slug=slug)
-    post.delete()
-    return redirect('dashboard')
+    context = {
+        'page': page,
+    }
+    if request.method == 'POST': # confirming delete
+        post.delete()
+        return redirect('dashboard')
+    return render(request, 'post/delete_confirm.html', context)
 
 
 def updatePost(request, slug):
@@ -203,10 +209,16 @@ def updatePost(request, slug):
 
 
 @login_required(login_url='login')
-def deleteCategory(requset, slug):
+def deleteCategory(request, slug):
+    page = 'category'
     category = Category.objects.get(slug=slug)
-    category.delete()
-    return redirect('categories')
+    context = {
+        'page': page,
+    }
+    if request.method == 'POST': # confirming delete
+        category.delete()
+        return redirect('categories')
+    return render(request, 'post/delete_confirm.html', context)
 
 
 @login_required(login_url='login')
@@ -241,9 +253,16 @@ def tagList(request):
 
 @login_required(login_url='login')
 def deleteTag(request, slug):
+    page = 'tag'
+    context = {
+        'page': page,
+    }
     tag = Tag.objects.get(slug=slug)
-    tag.delete()
-    return redirect('tags')
+    if request.method == 'POST': # confirming delete
+        tag.delete()
+        return redirect('tags')
+    return render(request, 'post/delete_confirm.html', context)
+
 
 
 @login_required(login_url='login')

@@ -39,8 +39,10 @@
     <div class="comment">
         <h2>Comments:</h2>
         {% if request.user.is_authenticated %}
-        <!-- commenting section          TODO-->
+        <a href="#" class="btn btn-outline-secondary btn-sm">Add Comment</a>
+
         {% endif %}
+
         {% for comment in comments %}
             <h1>{{comment.title}}</h1>
             <div class="publish_info">Post Date: {{comment.created_at}}</div>
