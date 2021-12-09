@@ -31,37 +31,37 @@
 <div class='container'></div>
     <div class="login--wrapper" style="display: flex; align-items: center; height: 50vh;">
         {% if page == 'login' %}
-        
-        <form method='post' class='form' style="width: 500px;">
-            <h1>Login</h1>
-            {% csrf_token %}
-            
-            <div class="mb-3 my-5">
-            <label for="exampleInputUser1" class="form-label">Username</label>
-            <input type="username" name='username' class="form-control" id="exampleInputUser1" aria-describedby="userHelp">
-            </div>
-            <div class="mb-3">
-            <label for="exampleInputPassword1" class="form-label">Password</label>
-            <input type="password" name='password' class="form-control" id="exampleInputPassword1">
-            </div>
-            <button type="submit" class="btn btn-primary">Login</button>
-            <p>Don't Have an Account <a href="{% url 'register' %}">Register</a></p>
-        </form>
-        {% else %}
-        <form method="post">
-            <h1>Register</h1>
-            {% csrf_token %}
-            <div class="my-5">
-                {% for field in form %}
-                <div class="mb-3">
-                    <label for="exampleInputPassword1" class="form-label">{{field.label}}</label>
-                    {{field}}
+
+            <form method='post' class='form' style="width: 500px;">
+                <h1>Login</h1>
+                {% csrf_token %}
+                
+                <div class="mb-3 my-5">
+                    <label for="exampleInputUser1" class="form-label">Username</label>
+                    <input type="username" name='username' class="form-control" id="exampleInputUser1" aria-describedby="userHelp">
                 </div>
-                {% endfor %}
-            </div>
-            <button type="submit" class="btn btn-primary">Register</button>
-            <p>Already Have an Account <a href="{% url 'login' %}">Login</a></p>
-        </form>
+                <div class="mb-3">
+                    <label for="exampleInputPassword1" class="form-label">Password</label>
+                    <input type="password" name='password' class="form-control" id="exampleInputPassword1">
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+                <p>Don't Have an Account <a href="{% url 'register' %}">Register</a></p>
+            </form>
+        {% else %}
+            <form method="post">
+                <h1>Register</h1>
+                {% csrf_token %}
+                <div class="my-5">
+                    {% for field in form %}
+                    <div class="mb-3">
+                        <label for="exampleInputPassword1" class="form-label">{{field.label}}</label>
+                        {{field}}
+                    </div>
+                    {% endfor %}
+                </div>
+                <button type="submit" class="btn btn-primary">Register</button>
+                <p>Already Have an Account <a href="{% url 'login' %}">Login</a></p>
+            </form>
 
         {% endif %}
     </div>
