@@ -24,7 +24,8 @@ h1 {
 h2 {
 	margin: 0px 0px 8px 0px;
 	padding: 10px 0px 0px 15px;
-	font-size: 14px;
+	font-weight: bold;
+	font-size: 15px;
 	color: #000000;
 }
 
@@ -267,6 +268,20 @@ IE6 Only */
 	font-weight: bold;
 	background: url(post/media/comment_icon.gif) left center no-repeat;
 }
+
+.postDetailComment {
+	clear: both;
+	margin: 10px 0px 0px 0px;
+	width: 570px;
+	padding: 0px;
+}
+.postDetailComment a {
+	padding: 5px 0px 5px 0px;
+	font-size: 11px;
+	font-weight: bold;
+	background: url(post/media/comment_icon.gif) left center no-repeat;
+}
+
 /* ----- End of Post ------ */
 
 .search {

@@ -28,7 +28,7 @@
 
 
 {% block content %}
-    <div class="postbody">
+    <div style="margin-bottom: 70px;">
         <h1>{{post.title}}</h1><br><br>
         <div class="publish_info">Author: {{post.author.username}} ··· Post Date: {{post.created_at}} ··· Categories: <a href="#">{% for category_ in post.category.all %}{{category_.title}}, {% endfor %}</a></div>
         <div class="publish_info">Tags: {% for tag_ in post.tag.all %}{{tag_.title}}, {% endfor %}</div><br>
@@ -36,17 +36,17 @@
     </div>
     <br>
     <br>
-    <div class="comment">
-        <h2>Comments:</h2>
-        {% if request.user.is_authenticated %}
-        <a href="{% url 'add_comment' post.slug %}" class="btn btn-outline-secondary btn-sm">Add Comment</a>
-        {% endif %}
+    <div class="postDetailComment">
+        <h2>Comments: </h2><br>
 
         {% for comment in comments %}
             <h1>{{comment.title}}</h1><br><br>
-            <div class="publish_info">Author: {{comment.author.username}} ··· Comment Date: {{comment.created_at}}</div>
+            <div class="">Author: {{comment.author.username}} ··· Comment Date: {{comment.created_at}}</div>
             <p>{{comment.content}}</p>
             <br>
         {% endfor %}
+        {% if request.user.is_authenticated %}
+        <a href="{% url 'add_comment' post.slug %}" class="btn btn-outline-secondary btn-sm" >Add Comment</a>
+        {% endif %}
     </div>
 {% endblock content %}
