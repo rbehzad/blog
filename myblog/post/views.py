@@ -5,7 +5,7 @@ from django.http.response import HttpResponse
 from django.shortcuts import redirect, render
 from django.views.generic import ListView
 from django.urls import reverse
-import post
+from django.db.models import Q
 
 from post.forms import *
 from post.models import Category, Post, Tag
@@ -170,20 +170,6 @@ def addTag(request):
     return render(request, 'post/add_update.html', context)
 
 
-@login_required(login_url='login')
-def categoryList(request):
-    user = request.user
-    page = 'categories'
-    categories = Category.objects.filter(creator=user).order_by('-created_at')
-    tags = Tag.objects.all()
-    context = {
-        'categories': categories,
-        'tags': tags,
-        'page': page,
-    }
-    return render(request, 'post/delete_updateButton.html', context)
-
-
 def deletePost(request, slug):
     page = 'post'
     post = Post.objects.get(slug=slug)
@@ -243,15 +229,35 @@ def updateCategory(request, slug):
 
 
 @login_required(login_url='login')
-def tagList(request):
+def categoryList(request):
     user = request.user
-    page = 'tags'
-    categories = Category.objects.all()
-    tags = Tag.objects.filter(creator=user).order_by('-created_at')
+    page = 'categories'
+    categories = Category.objects.order_by('-created_at')
+    tags = Tag.objects.all().order_by('-created_at')
+
+    my_categories = Category.objects.filter(creator=user).order_by('-created_at')
     context = {
         'categories': categories,
         'tags': tags,
         'page': page,
+        'my_categories': my_categories,
+    }
+    return render(request, 'post/delete_updateButton.html', context)
+
+
+@login_required(login_url='login')
+def tagList(request):
+    user = request.user
+    page = 'tags'
+    categories = Category.objects.all().order_by('-created_at')
+    tags = Tag.objects.all().order_by('-created_at')
+
+    my_tags = Tag.objects.filter(creator=user).order_by('-created_at')
+    context = {
+        'categories': categories,
+        'tags': tags,
+        'page': page,
+        'my_tags': my_tags,
     }
     return render(request, 'post/delete_updateButton.html', context)
 
@@ -313,7 +319,7 @@ def addComment(request, slug):
 def searchPost(request):
     if request.method == 'POST':
         searched = request.POST['search']
-        posts = Post.objects.filter(title__contains=searched)
+        posts = Post.objects.filter(Q(title__contains=searched) | Q(content__contains=searched))
         context = {
             'searched': searched,
             'posts': posts,
