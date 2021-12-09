@@ -5,6 +5,7 @@ from django.http.response import HttpResponse
 from django.shortcuts import redirect, render
 from django.views.generic import ListView
 from django.urls import reverse
+import post
 
 from post.forms import *
 from post.models import Category, Post, Tag
@@ -307,3 +308,17 @@ def addComment(request, slug):
 
     context = {'categories': categories, 'form': form, 'page': page, 'tags': tags}
     return render(request, 'post/add_update.html', context)
+
+
+def searchPost(request):
+    if request.method == 'POST':
+        searched = request.POST['search']
+        posts = Post.objects.filter(title__contains=searched)
+        context = {
+            'searched': searched,
+            'posts': posts,
+        }
+        return render(request, 'post/search.html', context)
+    else:
+        context = {}
+        return render(request, 'post/search.html', context)
