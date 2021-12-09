@@ -1,11 +1,12 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
+from django.db.models import Q
 from django.http import request
 from django.http.response import HttpResponse
 from django.shortcuts import redirect, render
-from django.views.generic import ListView
 from django.urls import reverse
-from django.db.models import Q
+from django.views.generic import ListView
 
 from post.forms import *
 from post.models import Category, Post, Tag
@@ -17,14 +18,14 @@ class HomeListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['posts'] = Post.objects.all().order_by('-created_at')
-        context['categories'] = Category.objects.all()
-        context['tags'] = Tag.objects.all()
+        context['categories'] = Category.objects.all().order_by('-created_at')
+        context['tags'] = Tag.objects.all().order_by('-created_at')
         return context
 
 def post_detail(request, slug_text):
     post = Post.objects.filter(slug = slug_text)
-    categories = Category.objects.all()
-    tags = Tag.objects.all()
+    categories = Category.objects.all().order_by('-created_at')
+    tags = Tag.objects.all().order_by('-created_at')
     if post.exists():
         post = post.first()
     else:
@@ -43,9 +44,10 @@ def post_detail(request, slug_text):
 def class_category(request, slug_text):
     category = Category.objects.get(slug=slug_text)
     posts = Post.objects.filter(category=category).order_by('-created_at')
-    categories = Category.objects.all()
-    tags = Tag.objects.all()
+    categories = Category.objects.all().order_by('-created_at')
+    tags = Tag.objects.all().order_by('-created_at')
     context = {
+        'category_name': category.title,
         'posts': posts,
         'categories': categories,
         'tags': tags,
@@ -59,8 +61,8 @@ def class_category(request, slug_text):
 def dashboard(request):
     user = request.user
     posts = Post.objects.filter(author=user).order_by('-created_at')
-    categories = Category.objects.all()
-    tags = Tag.objects.all()
+    categories = Category.objects.all().order_by('-created_at')
+    tags = Tag.objects.all().order_by('-created_at')
     context = {
         'posts': posts,
         'categories': categories,
@@ -109,8 +111,8 @@ def registerUser(request):
 @login_required(login_url='login')
 def addPost(request):
     page = 'add_post'
-    categories = Category.objects.all()
-    tags = Tag.objects.all()
+    categories = Category.objects.all().order_by('-created_at')
+    tags = Tag.objects.all().order_by('-created_at')
     form = AddPost()
     if request.method == 'POST':
         form = AddPost(request.POST, request.FILES)
@@ -131,8 +133,8 @@ def addPost(request):
 @login_required(login_url='login')
 def addCategory(request):
     page = 'add_category'
-    categories = Category.objects.all()
-    tags = Tag.objects.all()
+    categories = Category.objects.all().order_by('-created_at')
+    tags = Tag.objects.all().order_by('-created_at')
     form = AddCategory()
     if request.method == 'POST':
         form = AddCategory(request.POST)
@@ -152,8 +154,8 @@ def addCategory(request):
 @login_required(login_url='login')
 def addTag(request):
     page = 'add_tag'
-    categories = Category.objects.all()
-    tags = Tag.objects.all()
+    categories = Category.objects.all().order_by('-created_at')
+    tags = Tag.objects.all().order_by('-created_at')
     form = AddTag()
     if request.method == 'POST':
         form = AddTag(request.POST)
@@ -185,8 +187,8 @@ def deletePost(request, slug):
 def updatePost(request, slug):
     page = 'update_post'
     post = Post.objects.get(slug=slug)
-    categories = Category.objects.all()
-    tags = Tag.objects.all()
+    categories = Category.objects.all().order_by('-created_at')
+    tags = Tag.objects.all().order_by('-created_at')
     form = AddPost()
     if request.method == 'POST':
         form = AddPost(request.POST, instance=post)
@@ -214,8 +216,8 @@ def deleteCategory(request, slug):
 @login_required(login_url='login')
 def updateCategory(request, slug):
     page = 'update_category'
-    categories = Category.objects.all()
-    tags = Tag.objects.all()
+    categories = Category.objects.all().order_by('-created_at')
+    tags = Tag.objects.all().order_by('-created_at')
     category = Category.objects.get(slug=slug)
     form = AddCategory()
     if request.method == 'POST':
@@ -279,8 +281,8 @@ def deleteTag(request, slug):
 @login_required(login_url='login')
 def updateTag(request, slug):
     page = 'update_tag'
-    categories = Category.objects.all()
-    tags = Tag.objects.all()
+    categories = Category.objects.all().order_by('-created_at')
+    tags = Tag.objects.all().order_by('-created_at')
     tag = Tag.objects.get(slug=slug)
     form = AddTag()
     if request.method == 'POST':
@@ -296,8 +298,8 @@ def updateTag(request, slug):
 
 def addComment(request, slug):
     page = 'add_comment'
-    categories = Category.objects.all()
-    tags = Tag.objects.all()
+    categories = Category.objects.all().order_by('-created_at')
+    tags = Tag.objects.all().order_by('-created_at')
     form = AddComment()
     if request.method == 'POST':
         form = AddComment(request.POST)
@@ -317,14 +319,41 @@ def addComment(request, slug):
 
 
 def searchPost(request):
+    categories = Category.objects.all().order_by('-created_at')
+    tags = Tag.objects.all().order_by('-created_at')
+
     if request.method == 'POST':
         searched = request.POST['search']
         posts = Post.objects.filter(Q(title__contains=searched) | Q(content__contains=searched))
         context = {
             'searched': searched,
             'posts': posts,
+            'categories': categories,
+            'tags': tags,
         }
         return render(request, 'post/search.html', context)
     else:
         context = {}
         return render(request, 'post/search.html', context)
+
+
+def contact(request):
+    categories = Category.objects.all().order_by('-created_at')
+    tags = Tag.objects.all().order_by('-created_at')
+    context = {'categories': categories, 'tags': tags}
+    if request.method == "POST":
+        message_name = request.POST['message-name']
+        message_email = request.POST['message-email']
+        message = request.POST['message']
+        send_mail(
+            'message from ' + message_name, # subject
+            message, # message
+            message_email, # from email
+            ['rezebehzadfard.02@gmail.com'], # to email
+        )
+
+        context['message_name'] = message_name
+        return render(request, 'post/contact.html', context)
+    
+    else:
+        return render(request, 'post/contact.html', context)

@@ -28,4 +28,6 @@ urlpatterns = [
 
     path('add-comment/<slug:slug>', addComment, name='add_comment'),
     path('search-post/', searchPost, name='search_post'),
+
+    path('contact/', contact, name='contact'),
 ]

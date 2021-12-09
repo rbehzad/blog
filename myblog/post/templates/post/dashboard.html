@@ -1,13 +1,15 @@
 {% extends "post/class_base.html" %}
 {% load static %}
 
-{% block title %}{{request.user}}'s page{% endblock title %}
+{% block title %}
+  {{request.user}}'s dashboard
+{% endblock title %}
 
 
 {% block menu %}
 <ul>
     <li><a href="{% url 'home' %}">Home</a></li>
-    <li><a href="#">About</a></li>
+    <li><a href="{% url 'contact' %}">Contact me</a></li>
     <li><a href="{% url 'add_post' %}">Add New Post</a></li>
     <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
     <li><a href="{% url 'logout' %}">Logout</a></li>
